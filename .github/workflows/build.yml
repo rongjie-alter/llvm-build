@@ -1,0 +1,62 @@
+name: Build LLVM
+
+on:
+  workflow_dispatch:
+    inputs:
+      forceVersion:
+        description: 'Define git ref'
+        default: 'main'
+
+jobs:
+  build:
+    name: Build
+    env:
+      SRC_DIR: src
+      BUILD_DIR: build
+      NINJA_DIR: tool
+      INSTALL_DIR: install
+      CFLAGS: "/Gy /Gw /GS-"
+      LDFLAGS: "/OPT:REF /OPT:ICF"
+    runs-on: windows-2019
+    strategy:
+      matrix: ~
+    steps:
+
+      - name: Download Ninja
+        run: |
+          cmd /c "curl.exe -L https://github.com/ninja-build/ninja/releases/download/v1.10.2/ninja-win.zip > ninja.zip"
+          Expand-Archive -Path ninja.zip -DestinationPath ${env:NINJA_DIR}
+          echo "PATH=${env:PATH};${env:NINJA_DIR}" >> ${env:GITHUB_ENV}
+
+      - uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Download llvm-project
+        run: |
+          cmd /c "curl.exe -L https://github.com/llvm/llvm-project/archive/refs/heads/main.zip > code.zip"
+          Expand-Archive -Path code.zip -DestinationPath ${env:SRC_DIR}
+
+      - name: Build
+        run: |
+          cmake -B ${env:BUILD_DIR} -H ${env:SRC_DIR} -GNinja -DCMAKE_BUILD_TYPE=Release `
+          -DCMAKE_INSTALL_PEFIX=${env:INSTALL_DIR} -DLLVM_INCLUDE_TESTS=OFF `
+          -DLLVM_TARGETS_TO_BUILD=X86 `
+          -DCMAKE_C_FLAGS="${env:CFLAGS}" `
+          -DCMAKE_CXX_FLAGS="${env:CFLAGS}" `
+          -DCMAKE_EXE_LINKER_FLAGS="${env:LDFLAGS}" `
+          -DCMAKE_SHARED_LINKER_FLAGS="${env:LDFLAGS}" `
+          -DCMAKE_MODULE_LINKER_FLAGS="${env:LDFLAGS}" `
+          -DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=WebAssembly `
+          -DLLVM_INCLUDE_EXAMPLES=OFF
+
+          ninja -C ${env:BUILD_DIR}
+          ninja -C ${env:BUILD_DIR} install
+
+      - name: Zip folder
+        run: |
+          7z a llvm.7z ${env:INSTALL_DIR}
+
+      - name: Publish artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: LLVM
+          path: llvm.7z
