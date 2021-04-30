@@ -29,11 +29,16 @@ jobs:
           echo "PATH=${env:PATH};${CurrentDir}\${env:NINJA_DIR}" >> ${env:GITHUB_ENV}
 
       - uses: ilammy/msvc-dev-cmd@v1
+      
+      - uses: actions/checkout@v2
+        with:
+          repository: llvm/llvm-project
+          path: ${{ env.SRC_DIR }}
 
-      - name: Download llvm-project
-        run: |
-          cmd /c "curl.exe -L https://github.com/llvm/llvm-project/archive/refs/heads/main.zip > code.zip"
-          Expand-Archive -Path code.zip -DestinationPath ${env:SRC_DIR}
+      #- name: Download llvm-project
+      #  run: |
+      #    cmd /c "curl.exe -L https://github.com/llvm/llvm-project/archive/refs/heads/main.zip > code.zip"
+      #    Expand-Archive -Path code.zip -DestinationPath ${env:SRC_DIR}
 
       - name: Build
         run: |
