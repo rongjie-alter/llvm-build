@@ -42,16 +42,16 @@ jobs:
 
       - name: Build
         run: |
-          cmake "-B${env:BUILD_DIR}" "-H${env:SRC_DIR}" -GNinja -DCMAKE_BUILD_TYPE=Release `
-          -DCMAKE_INSTALL_PEFIX=${env:INSTALL_DIR} -DLLVM_INCLUDE_TESTS=OFF `
-          -DLLVM_TARGETS_TO_BUILD=X86 `
-          -DCMAKE_C_FLAGS="${env:CFLAGS}" `
-          -DCMAKE_CXX_FLAGS="${env:CFLAGS}" `
-          -DCMAKE_EXE_LINKER_FLAGS="${env:LDFLAGS}" `
-          -DCMAKE_SHARED_LINKER_FLAGS="${env:LDFLAGS}" `
-          -DCMAKE_MODULE_LINKER_FLAGS="${env:LDFLAGS}" `
-          -DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=WebAssembly `
-          -DLLVM_INCLUDE_EXAMPLES=OFF
+          cmake "-B${env:BUILD_DIR}" "-H${env:SRC_DIR}" "-GNinja" "-DCMAKE_BUILD_TYPE=Release" `
+          "-DCMAKE_INSTALL_PEFIX=${env:INSTALL_DIR}" "-DLLVM_INCLUDE_TESTS=OFF" `
+          "-DLLVM_TARGETS_TO_BUILD=X86" `
+          "-DCMAKE_C_FLAGS=${env:CFLAGS}" `
+          "-DCMAKE_CXX_FLAGS=${env:CFLAGS}" `
+          "-DCMAKE_EXE_LINKER_FLAGS=${env:LDFLAGS}" `
+          "-DCMAKE_SHARED_LINKER_FLAGS=${env:LDFLAGS}" `
+          "-DCMAKE_MODULE_LINKER_FLAGS=${env:LDFLAGS}" `
+          "-DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=WebAssembly" `
+          "-DLLVM_INCLUDE_EXAMPLES=OFF"
 
           ninja -C ${env:BUILD_DIR}
           ninja -C ${env:BUILD_DIR} install
