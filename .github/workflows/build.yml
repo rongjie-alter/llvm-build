@@ -18,8 +18,7 @@ jobs:
       CFLAGS: "/Gy /Gw /GS-"
       LDFLAGS: "/OPT:REF /OPT:ICF"
     runs-on: windows-2019
-    strategy:
-      matrix: ~
+
     steps:
 
       - name: Download Ninja
