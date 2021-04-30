@@ -43,7 +43,7 @@ jobs:
       - name: Build
         run: |
           cmake "-B${env:BUILD_DIR}" "-S" "${env:SRC_DIR}/llvm" "-GNinja" "-DCMAKE_BUILD_TYPE=Release" `
-          "-DCMAKE_INSTALL_PEFIX=${env:INSTALL_DIR}" "-DLLVM_INCLUDE_TESTS=OFF" `
+          "-DCMAKE_INSTALL_PREFIX=${env:INSTALL_DIR}" "-DLLVM_INCLUDE_TESTS=OFF" `
           "-DLLVM_TARGETS_TO_BUILD=X86" `
           "-DCMAKE_C_FLAGS=${env:CFLAGS}" `
           "-DCMAKE_CXX_FLAGS=${env:CFLAGS}" `
@@ -51,7 +51,8 @@ jobs:
           "-DCMAKE_SHARED_LINKER_FLAGS=${env:LDFLAGS}" `
           "-DCMAKE_MODULE_LINKER_FLAGS=${env:LDFLAGS}" `
           "-DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=WebAssembly" `
-          "-DLLVM_INCLUDE_EXAMPLES=OFF"
+          "-DLLVM_INCLUDE_EXAMPLES=OFF" `
+          "-DLLVM_ENABLE_PROJECTS=clang,lld,compiler-rt"
 
           ninja -C ${env:BUILD_DIR}
           ninja -C ${env:BUILD_DIR} install
