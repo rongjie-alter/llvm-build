@@ -25,7 +25,8 @@ jobs:
         run: |
           cmd /c "curl.exe -L https://github.com/ninja-build/ninja/releases/download/v1.10.2/ninja-win.zip > ninja.zip"
           Expand-Archive -Path ninja.zip -DestinationPath ${env:NINJA_DIR}
-          echo "PATH=${env:PATH};${env:NINJA_DIR}" >> ${env:GITHUB_ENV}
+          $CurrentDir = $(Get-Location).Path
+          echo "PATH=${env:PATH};${CurrentDir}\${env:NINJA_DIR}" >> ${env:GITHUB_ENV}
 
       - uses: ilammy/msvc-dev-cmd@v1
 
