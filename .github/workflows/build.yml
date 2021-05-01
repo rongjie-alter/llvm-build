@@ -52,7 +52,7 @@ jobs:
           "-DCMAKE_MODULE_LINKER_FLAGS=${env:LDFLAGS}" `
           "-DLLVM_EXPERIMENTAL_TARGETS_TO_BUILD=WebAssembly" `
           "-DLLVM_INCLUDE_EXAMPLES=OFF" `
-          "-DLLVM_ENABLE_PROJECTS=clang,lld,compiler-rt"
+          "-DLLVM_ENABLE_PROJECTS=clang;lld;compiler-rt"
 
           ninja -C ${env:BUILD_DIR}
           ninja -C ${env:BUILD_DIR} install
